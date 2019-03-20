@@ -12,7 +12,8 @@ import org.eclipse.swt.widgets.Display;
 
 public class 石头语言用词规则 extends WordRule {
 
-  private static final ArrayList<String> 关键字 = new ArrayList<>(Arrays.asList("每当", "如果", "否则", "类别", "定义"));
+  private static final ArrayList<String> 关键字 =
+      new ArrayList<>(Arrays.asList("每当", "如果", "否则", "类别", "定义"));
 
   private static final Color 深紫红 = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_MAGENTA);
 
