@@ -20,7 +20,7 @@ public class 石头语言用词规则 extends WordRule {
     super(new 探测器());
 
     for (String 词 : 关键字) {
-      addWord(词, new Token(new TextAttribute(深紫红)));
+      addWord(词, new Token(new TextAttribute(深紫红, null, SWT.BOLD)));
     }
   }
 }
