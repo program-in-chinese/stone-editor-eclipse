@@ -1,10 +1,9 @@
 package stone_editor;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNatureDescriptor;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.util.Arrays;
 
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -14,56 +13,56 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
 public class StoneContentAssistProcessor implements IContentAssistProcessor {
 
-    @Override
-    public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
-    	// TODO this is logic for .project file to complete on nature and project references. Replace with your language logic!
-        String text = viewer.getDocument().get();
-        String natureTag= "<nature>";
-        String projectReferenceTag="<project>";
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        if (text.length() >= natureTag.length() && text.substring(offset - natureTag.length(), offset).equals(natureTag)) {
-            IProjectNatureDescriptor[] natureDescriptors= workspace.getNatureDescriptors();
-            ICompletionProposal[] proposals = new ICompletionProposal[natureDescriptors.length];
-            for (int i= 0; i < natureDescriptors.length; i++) {
-                IProjectNatureDescriptor descriptor= natureDescriptors[i];
-                proposals[i] = new CompletionProposal(descriptor.getNatureId(), offset, 0, descriptor.getNatureId().length());
-            }
-            return proposals;
-        }
-        if (text.length() >= projectReferenceTag.length() && text.substring(offset - projectReferenceTag.length(), offset).equals(projectReferenceTag)) {
-            IProject[] projects= workspace.getRoot().getProjects();
-            ICompletionProposal[] proposals = new ICompletionProposal[projects.length];
-            for (int i= 0; i < projects.length; i++) {
-                proposals[i]=new CompletionProposal(projects[i].getName(), offset, 0, projects[i].getName().length());
-            }
-            return proposals;
-        }
-        return new ICompletionProposal[0];
-    }
+  public static final String[] PROPOSALS =
+      new String[] {"ID:", "Summary:", "Description:", "Done:", "Duedate:", "Dependent:"};
 
-    @Override
-    public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
-        return null;
-    }
+  @Override
+  public ICompletionProposal[] computeCompletionProposals(ITextViewer 视图, int 偏移) {
 
-    @Override
-    public char[] getCompletionProposalAutoActivationCharacters() {
-        return new char[] { '"' }; //NON-NLS-1
-    }
+    IDocument document = 视图.getDocument();
 
-    @Override
-    public char[] getContextInformationAutoActivationCharacters() {
-        return null;
-    }
+    try {
+      int 偏移所在行 = document.getLineOfOffset(偏移);
+      int 行头偏移 = document.getLineOffset(偏移所在行);
 
-    @Override
-    public String getErrorMessage() {
-        return null;
-    }
+      int 当前行文本长度 = 偏移 - 行头偏移;
+      String 当前行文本 = document.get(行头偏移, 当前行文本长度).toLowerCase();
 
-    @Override
-    public IContextInformationValidator getContextInformationValidator() {
-        return null;
+      return Arrays.asList(PROPOSALS).stream()
+          .filter(建议 -> !视图.getDocument().get().contains(建议) && 建议.toLowerCase().startsWith(当前行文本))
+          .map(建议 -> new CompletionProposal(建议, 行头偏移, 当前行文本长度, 建议.length()))
+          .toArray(ICompletionProposal[]::new);
+    } catch (BadLocationException e) {
+      e.printStackTrace();
     }
+    return new ICompletionProposal[0];
+  }
+
+  @Override
+  public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
+    return null;
+  }
+
+  @Override
+  public char[] getCompletionProposalAutoActivationCharacters() {
+    String keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return keys.toCharArray();
+  }
+
+  @Override
+  public char[] getContextInformationAutoActivationCharacters() {
+    String keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return keys.toCharArray();
+  }
+
+  @Override
+  public String getErrorMessage() {
+    return null;
+  }
+
+  @Override
+  public IContextInformationValidator getContextInformationValidator() {
+    return null;
+  }
 
 }
