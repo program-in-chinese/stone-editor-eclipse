@@ -13,12 +13,12 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
-public class StoneReconciler extends PresentationReconciler {
+public class 协调器 extends PresentationReconciler {
   Token 深红 = 字号(SWT.COLOR_DARK_RED);
   Token 深绿 = 字号(SWT.COLOR_DARK_GREEN);
   Token 蓝色 = 字号(SWT.COLOR_BLUE);
 
-  public StoneReconciler() {
+  public 协调器() {
     SingleLineRule 单引号 = new SingleLineRule("'", "'", 深红);
     SingleLineRule 双引号 = new SingleLineRule("\"", "\"", 深红);
     NumberRule 数字 = new NumberRule(蓝色);

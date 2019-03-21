@@ -21,21 +21,21 @@
    <extension
          point="org.eclipse.ui.genericeditor.presentationReconcilers">
       <presentationReconciler
-            class="stone_editor.StoneReconciler"
+            class="stone_editor.协调器"
             contentType="stone_editor.stone">
       </presentationReconciler>
    </extension>
    <extension
          point="org.eclipse.ui.genericeditor.hoverProviders">
       <hoverProvider
-            class="stone_editor.StoneHoverProvider"
+            class="stone_editor.悬浮提供器"
             contentType="stone_editor.stone">
       </hoverProvider>
    </extension>
    <extension
          point="org.eclipse.ui.genericeditor.contentAssistProcessors">
       <contentAssistProcessor
-            class="stone_editor.StoneContentAssistProcessor"
+            class="stone_editor.内容辅助处理器"
             contentType="stone_editor.stone">
       </contentAssistProcessor>
    </extension>

@@ -7,7 +7,7 @@ import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 
-public class StoneHoverProvider implements ITextHover {
+public class 悬浮提供器 implements ITextHover {
 
   @Override
   public String getHoverInfo(ITextViewer 文本视图, IRegion 悬浮位置) {

@@ -11,10 +11,9 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
-public class StoneContentAssistProcessor implements IContentAssistProcessor {
+public class 内容辅助处理器 implements IContentAssistProcessor {
 
-  public static final String[] PROPOSALS =
-      new String[] {"ID:", "Summary:", "Description:", "Done:", "Duedate:", "Dependent:"};
+  public static final String[] PROPOSALS = new String[] {"新建"};
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(ITextViewer 视图, int 偏移) {
@@ -45,13 +44,13 @@ public class StoneContentAssistProcessor implements IContentAssistProcessor {
 
   @Override
   public char[] getCompletionProposalAutoActivationCharacters() {
-    String keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String keys = "新";
     return keys.toCharArray();
   }
 
   @Override
   public char[] getContextInformationAutoActivationCharacters() {
-    String keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String keys = "";
     return keys.toCharArray();
   }
 
