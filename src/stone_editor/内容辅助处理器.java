@@ -1,7 +1,6 @@
 package stone_editor;
 
-import java.util.Arrays;
-
+import java.util.ArrayList;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -24,13 +23,44 @@ public class 内容辅助处理器 implements IContentAssistProcessor {
       int 偏移所在行 = 文件.getLineOfOffset(偏移);
       int 行头偏移 = 文件.getLineOffset(偏移所在行);
 
-      int 当前行文本长度 = 偏移 - 行头偏移;
-      String 当前行文本 = 文件.get(行头偏移, 当前行文本长度).toLowerCase();
-
-      return Arrays.asList(所有建议).stream()
-          .filter(建议 -> !视图.getDocument().get().contains(建议) && 建议.toLowerCase().startsWith(当前行文本))
-          .map(建议 -> new CompletionProposal(建议, 行头偏移, 当前行文本长度, 建议.length()))
-          .toArray(ICompletionProposal[]::new);
+	String 行首至光标文本 = 文件.get(行头偏移, 偏移-行头偏移);
+	
+	ArrayList<CompletionProposal> proposals = new ArrayList<>();
+	
+	for ( String term : 所有建议 ) {
+		int endCharIndex = 行首至光标文本.lastIndexOf(term.charAt(0));
+		int overlapLength = 行首至光标文本.length() - endCharIndex;
+		if ( endCharIndex >= 0 & term.length() >= overlapLength ) {
+			if (  行首至光标文本.charAt(endCharIndex) == term.charAt(0) ) {
+				String endStr = 行首至光标文本.substring(endCharIndex);
+				String startStr = term.substring(0, overlapLength);
+				if ( endStr.equals(startStr) ) {
+					proposals.add(new CompletionProposal(term, 偏移-overlapLength, overlapLength, term.length()));
+				}
+			}
+		}
+		
+//		More comprehensible version
+//		for ( int i=0; i<行首至光标文本.length(); i++ ) {
+//			int endCharIndex = 行首至光标文本.length()-1-i;
+//			if ( endCharIndex >= 0 & term.length() > i ) {
+//				if (  行首至光标文本.charAt(endCharIndex) == term.charAt(0) ) {
+//					// dock
+//					String endStr = 行首至光标文本.substring(endCharIndex);
+//					int overlapLength = i+1;
+//					String startStr = term.substring(0, overlapLength);
+//					// System.out.println(endStr+" "+startStr);
+//					if ( endStr.equals(startStr) ) {
+//						proposals.add(new CompletionProposal(term, 偏移-overlapLength, overlapLength, term.length()));
+//					}
+//				}
+//			}
+//			else {
+//				break;
+//			}
+//		}
+	}
+	return proposals.stream().toArray(ICompletionProposal[]::new);
     } catch (BadLocationException e) {
       e.printStackTrace();
     }
