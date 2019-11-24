@@ -31,8 +31,7 @@ public class 内容辅助处理器 implements IContentAssistProcessor {
       String 所有内容 = 文件.get();
 
       List<补全建议信息> 建议信息 = 获取建议(所有建议, 所有内容, 当前行文本, 行头偏移, 当前行文本长度);
-      return 建议信息.stream()
-          .map(信息 -> new CompletionProposal(信息.取代文本, 信息.取代偏移, 信息.取代长度, 信息.光标位置))
+      return 建议信息.stream().map(信息 -> new CompletionProposal(信息.取代文本, 信息.取代偏移, 信息.取代长度, 信息.光标位置))
           .toArray(ICompletionProposal[]::new);
     } catch (BadLocationException e) {
       e.printStackTrace();
@@ -43,7 +42,7 @@ public class 内容辅助处理器 implements IContentAssistProcessor {
   protected List<补全建议信息> 获取建议(String[] 备选建议, String 所有内容, String 当前行文本, int 行头偏移, int 当前行文本长度)
       throws BadLocationException {
     List<补全建议信息> 建议信息 = new ArrayList<>();
-    for (String 建议: Arrays.asList(备选建议)) {
+    for (String 建议 : Arrays.asList(备选建议)) {
       if (!所有内容.contains(建议) && 建议.toLowerCase().startsWith(当前行文本)) {
         建议信息.add(new 补全建议信息(建议, 行头偏移, 当前行文本长度, 建议.length()));
       }
